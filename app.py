@@ -3,7 +3,6 @@ import os
 
 from storage import save_video, get_videos, get_clips
 from ai import generate_clip
-from clipper import make_clip
 
 st.set_page_config(
     page_title="ClipAI",
@@ -13,9 +12,9 @@ st.set_page_config(
 
 os.makedirs("uploads", exist_ok=True)
 
-# ======================
-# Sidebar
-# ======================
+# ==========================
+# SIDEBAR
+# ==========================
 with st.sidebar:
     st.title("🎬 ClipAI")
 
@@ -30,18 +29,20 @@ with st.sidebar:
         ]
     )
 
-# ======================
-# Dashboard
-# ======================
+# ==========================
+# DASHBOARD
+# ==========================
 if menu == "🏠 Dashboard":
 
     st.title("🎬 ClipAI Dashboard")
-    st.write("Selamat datang di ClipAI!")
-    st.success("Server berjalan dengan baik ✅")
 
-# ======================
-# Upload
-# ======================
+    st.success("Server Online ✅")
+
+    st.write("Selamat datang di ClipAI")
+
+# ==========================
+# UPLOAD
+# ==========================
 elif menu == "📤 Upload":
 
     st.title("📤 Upload Video")
@@ -59,38 +60,65 @@ elif menu == "📤 Upload":
 
         st.video(uploaded)
 
-        if st.button("Generate Clip"):
+        if st.button("🚀 Generate Clip"):
 
             progress = st.progress(0)
 
+            status = st.empty()
+
             for i in range(100):
+
                 progress.progress(i + 1)
+
+                if i < 30:
+                    status.text("📤 Uploading...")
+                elif i < 60:
+                    status.text("🎬 Memproses video...")
+                elif i < 90:
+                    status.text("✂️ Membuat clip...")
+                else:
+                    status.text("✅ Hampir selesai...")
 
             result = generate_clip(input_path)
 
             st.success(result["message"])
 
-# ======================
-# My Videos
-# ======================
+            st.video(result["output"])
+
+            with open(result["output"], "rb") as f:
+
+                st.download_button(
+                    "📥 Download Clip",
+                    data=f,
+                    file_name=os.path.basename(result["output"]),
+                    mime="video/mp4"
+                )
+
+# ==========================
+# MY VIDEOS
+# ==========================
 elif menu == "📂 My Videos":
 
-    st.title("📂 Video Saya")
+    st.title("📂 My Videos")
 
     videos = get_videos()
 
     if videos:
+
         for video in videos:
+
             st.write(f"🎥 {video}")
+
     else:
+
         st.info("Belum ada video.")
 
-# ======================
-# Results
-# ======================
+# ==========================
+# RESULTS
+# ==========================
 elif menu == "📥 Results":
 
-    st.title("📥 Hasil Clip")
+    st.title("📥 Results")
 
     clips = get_clips()
 
@@ -113,13 +141,13 @@ elif menu == "📥 Results":
 
         st.info("Belum ada clip.")
 
-# ======================
-# Settings
-# ======================
+# ==========================
+# SETTINGS
+# ==========================
 elif menu == "⚙️ Settings":
 
-    st.title("⚙️ Pengaturan")
+    st.title("⚙️ Settings")
 
-    st.write("Versi : ClipAI v1.0")
+    st.write("ClipAI Version 1.0")
 
-    st.write("Developer : Ahmad")
+    st.write("Developed by Ahmad")
