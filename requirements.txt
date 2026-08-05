@@ -1,5 +1,6 @@
-fastapi
-uvicorn
-python-multipart
-streamlit
-ffmpeg-python
+streamlit==1.37.1
+fastapi==0.115.0
+uvicorn==0.30.6
+python-multipart==0.0.9
+ffmpeg-python==0.2.0
+starlette==0.38.6
