@@ -21,3 +21,11 @@ if uploaded:
 
     if st.button("Generate Clip"):
         st.info("🚀 Fitur AI sedang dikembangkan...")
+import os
+
+os.makedirs("uploads", exist_ok=True)
+
+with open(f"uploads/{uploaded.name}", "wb") as f:
+    f.write(uploaded.getbuffer())
+
+st.success("✅ Video berhasil disimpan")
