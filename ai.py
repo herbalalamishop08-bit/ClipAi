@@ -1,13 +1,12 @@
-from clipper import make_clip
 import os
+from clipper import make_clip
 
-OUTPUT_FOLDER = "uploads"
+OUTPUT_FOLDER = "outputs"
 
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 
 def generate_clip(input_path):
-
     filename = os.path.basename(input_path)
 
     output_path = os.path.join(
@@ -25,4 +24,4 @@ def generate_clip(input_path):
 
 
 def generate_subtitle(input_path):
-    return "Subtitle akan segera tersedia."
+    return "Fitur subtitle akan segera hadir."
