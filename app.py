@@ -58,3 +58,24 @@ if uploaded:
                 file_name=f"clip_{uploaded.name}",
                 mime="video/mp4"
             )
+            st.divider()
+st.subheader("📥 Hasil Clip")
+
+clips = [
+    f for f in os.listdir("uploads")
+    if f.startswith("clip_")
+]
+
+if clips:
+    for clip in clips:
+        st.write(f"✅ {clip}")
+
+        with open(f"uploads/{clip}", "rb") as f:
+            st.download_button(
+                f"⬇️ Download {clip}",
+                data=f,
+                file_name=clip,
+                mime="video/mp4"
+            )
+else:
+    st.info("Belum ada clip yang dibuat.")
