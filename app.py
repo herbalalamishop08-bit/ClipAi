@@ -1,4 +1,6 @@
 import streamlit as st
+import os
+from clipper import make_clip
 
 st.set_page_config(
     page_title="ClipAI",
@@ -7,8 +9,9 @@ st.set_page_config(
 )
 
 st.title("🎬 ClipAI")
-
 st.write("Selamat datang di ClipAI")
+
+os.makedirs("uploads", exist_ok=True)
 
 uploaded = st.file_uploader(
     "Upload Video",
@@ -16,16 +19,30 @@ uploaded = st.file_uploader(
 )
 
 if uploaded:
-    st.success(f"Video berhasil dipilih: {uploaded.name}")
+
+    input_path = f"uploads/{uploaded.name}"
+
+    with open(input_path, "wb") as f:
+        f.write(uploaded.getbuffer())
+
+    st.success("✅ Video berhasil disimpan")
+
     st.video(uploaded)
 
     if st.button("Generate Clip"):
-        st.info("🚀 Fitur AI sedang dikembangkan...")
-import os
 
-os.makedirs("uploads", exist_ok=True)
+        output = f"uploads/clip_{uploaded.name}"
 
-with open(f"uploads/{uploaded.name}", "wb") as f:
-    f.write(uploaded.getbuffer())
+        make_clip(input_path, output)
 
-st.success("✅ Video berhasil disimpan")
+        st.success("✅ Clip berhasil dibuat!")
+
+        st.video(output)
+
+        with open(output, "rb") as f:
+            st.download_button(
+                "📥 Download Clip",
+                data=f,
+                file_name=f"clip_{uploaded.name}",
+                mime="video/mp4"
+            )
