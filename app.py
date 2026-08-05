@@ -8,74 +8,103 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🎬 ClipAI")
-st.write("Selamat datang di ClipAI")
-
 os.makedirs("uploads", exist_ok=True)
-st.divider()
-st.subheader("📂 Video yang sudah diupload")
 
-videos = [
-    f for f in os.listdir("uploads")
-    if f.endswith((".mp4", ".mov", ".avi", ".mkv"))
-]
+# ===== Sidebar =====
+with st.sidebar:
+    st.title("🎬 ClipAI")
+    menu = st.radio(
+        "Menu",
+        [
+            "🏠 Dashboard",
+            "📤 Upload",
+            "📂 My Videos",
+            "📥 Results",
+            "⚙️ Settings"
+        ]
+    )
 
-if videos:
-    for video in videos:
-        st.write(f"🎥 {video}")
-else:
-    st.info("Belum ada video yang diupload.")
-uploaded = st.file_uploader(
-    "Upload Video",
-    type=["mp4", "mov", "avi", "mkv"]
-)
+# ===== Dashboard =====
+if menu == "🏠 Dashboard":
+    st.title("🎬 ClipAI Dashboard")
+    st.write("Selamat datang di ClipAI!")
 
-if uploaded:
+# ===== Upload =====
+elif menu == "📤 Upload":
+    st.title("📤 Upload Video")
 
-    input_path = f"uploads/{uploaded.name}"
+    uploaded = st.file_uploader(
+        "Pilih Video",
+        type=["mp4", "mov", "avi", "mkv"]
+    )
 
-    with open(input_path, "wb") as f:
-        f.write(uploaded.getbuffer())
+    if uploaded:
 
-    st.success("✅ Video berhasil disimpan")
+        input_path = f"uploads/{uploaded.name}"
 
-    st.video(uploaded)
+        with open(input_path, "wb") as f:
+            f.write(uploaded.getbuffer())
 
-    if st.button("Generate Clip"):
+        st.success("✅ Video berhasil disimpan")
+        st.video(uploaded)
 
-        output = f"uploads/clip_{uploaded.name}"
+        if st.button("Generate Clip"):
 
-        make_clip(input_path, output)
+            output = f"uploads/clip_{uploaded.name}"
 
-        st.success("✅ Clip berhasil dibuat!")
+            make_clip(input_path, output)
 
-        st.video(output)
+            st.success("✅ Clip berhasil dibuat!")
+            st.video(output)
 
-        with open(output, "rb") as f:
-            st.download_button(
-                "📥 Download Clip",
-                data=f,
-                file_name=f"clip_{uploaded.name}",
-                mime="video/mp4"
-            )
-            st.divider()
-st.subheader("📥 Hasil Clip")
+            with open(output, "rb") as f:
+                st.download_button(
+                    "📥 Download Clip",
+                    data=f,
+                    file_name=f"clip_{uploaded.name}",
+                    mime="video/mp4"
+                )
 
-clips = [
-    f for f in os.listdir("uploads")
-    if f.startswith("clip_")
-]
+# ===== My Videos =====
+elif menu == "📂 My Videos":
+    st.title("📂 Video Saya")
 
-if clips:
-    for clip in clips:
-        st.write(f"✅ {clip}")
+    videos = [
+        f for f in os.listdir("uploads")
+        if f.endswith((".mp4", ".mov", ".avi", ".mkv"))
+        and not f.startswith("clip_")
+    ]
 
-        with open(f"uploads/{clip}", "rb") as f:
-            st.download_button(
-                f"⬇️ Download {clip}",
-                data=f,
-                file_name=clip,
-                mime="video/mp4"
-            )
-else:
-    st.info("Belum ada clip yang dibuat.")
+    if videos:
+        for video in videos:
+            st.write(f"🎥 {video}")
+    else:
+        st.info("Belum ada video.")
+
+# ===== Results =====
+elif menu == "📥 Results":
+    st.title("📥 Hasil Clip")
+
+    clips = [
+        f for f in os.listdir("uploads")
+        if f.startswith("clip_")
+    ]
+
+    if clips:
+        for clip in clips:
+            st.write(f"✅ {clip}")
+
+            with open(f"uploads/{clip}", "rb") as f:
+                st.download_button(
+                    f"⬇️ Download {clip}",
+                    data=f,
+                    file_name=clip,
+                    mime="video/mp4"
+                )
+    else:
+        st.info("Belum ada clip.")
+
+# ===== Settings =====
+elif menu == "⚙️ Settings":
+    st.title("⚙️ Pengaturan")
+    st.write("Fitur pengaturan akan segera hadir.")
