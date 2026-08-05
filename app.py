@@ -12,7 +12,19 @@ st.title("🎬 ClipAI")
 st.write("Selamat datang di ClipAI")
 
 os.makedirs("uploads", exist_ok=True)
+st.divider()
+st.subheader("📂 Video yang sudah diupload")
 
+videos = [
+    f for f in os.listdir("uploads")
+    if f.endswith((".mp4", ".mov", ".avi", ".mkv"))
+]
+
+if videos:
+    for video in videos:
+        st.write(f"🎥 {video}")
+else:
+    st.info("Belum ada video yang diupload.")
 uploaded = st.file_uploader(
     "Upload Video",
     type=["mp4", "mov", "avi", "mkv"]
