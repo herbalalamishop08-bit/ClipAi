@@ -122,24 +122,28 @@ elif menu == "📥 Results":
 
     clips = get_clips()
 
-    if clips:
+if clips:
 
-        for clip in clips:
+    for clip in clips:
 
-            st.write(f"✅ {clip}")
+        st.write(f"✅ {clip}")
 
-            with open(f"uploads/{clip}", "rb") as f:
+        clip_path = os.path.join("outputs", clip)
 
-                st.download_button(
-                    f"⬇️ Download {clip}",
-                    data=f,
-                    file_name=clip,
-                    mime="video/mp4"
-                )
+        st.video(clip_path)
 
-    else:
+        with open(clip_path, "rb") as f:
 
-        st.info("Belum ada clip.")
+            st.download_button(
+                f"⬇️ Download {clip}",
+                data=f,
+                file_name=clip,
+                mime="video/mp4"
+            )
+
+else:
+
+    st.info("Belum ada clip.")
 
 # ==========================
 # SETTINGS
