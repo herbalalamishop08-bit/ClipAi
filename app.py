@@ -11,6 +11,7 @@ st.set_page_config(
 )
 
 os.makedirs("uploads", exist_ok=True)
+os.makedirs("outputs", exist_ok=True)
 
 # ==========================
 # SIDEBAR
@@ -35,9 +36,7 @@ with st.sidebar:
 if menu == "🏠 Dashboard":
 
     st.title("🎬 ClipAI Dashboard")
-
     st.success("Server Online ✅")
-
     st.write("Selamat datang di ClipAI")
 
 # ==========================
@@ -60,10 +59,14 @@ elif menu == "📤 Upload":
 
         st.video(uploaded)
 
+        duration = st.selectbox(
+            "⏱️ Pilih Durasi Clip",
+            [15, 30, 60]
+        )
+
         if st.button("🚀 Generate Clip"):
 
             progress = st.progress(0)
-
             status = st.empty()
 
             for i in range(100):
@@ -79,7 +82,7 @@ elif menu == "📤 Upload":
                 else:
                     status.text("✅ Hampir selesai...")
 
-            result = generate_clip(input_path)
+            result = generate_clip(input_path, duration)
 
             st.success(result["message"])
 
@@ -106,7 +109,6 @@ elif menu == "📂 My Videos":
     if videos:
 
         for video in videos:
-
             st.write(f"🎥 {video}")
 
     else:
@@ -128,7 +130,11 @@ elif menu == "📥 Results":
 
             st.write(f"✅ {clip}")
 
-            with open(f"uploads/{clip}", "rb") as f:
+            clip_path = os.path.join("outputs", clip)
+
+            st.video(clip_path)
+
+            with open(clip_path, "rb") as f:
 
                 st.download_button(
                     f"⬇️ Download {clip}",
@@ -148,6 +154,6 @@ elif menu == "⚙️ Settings":
 
     st.title("⚙️ Settings")
 
-    st.write("ClipAI Version 1.0")
+    st.write("ClipAI Version 1.1")
 
     st.write("Developed by Ahmad")
