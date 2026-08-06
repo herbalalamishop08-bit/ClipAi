@@ -6,7 +6,7 @@ OUTPUT_FOLDER = "outputs"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 
-def generate_clip(input_path, duration=30):
+def generate_clip(input_path, duration=30, start_time=0):
 
     filename = os.path.basename(input_path)
 
@@ -15,7 +15,12 @@ def generate_clip(input_path, duration=30):
         f"clip_{filename}"
     )
 
-    make_clip(input_path, output_path, duration)
+    make_clip(
+        input_path=input_path,
+        output_path=output_path,
+        duration=duration,
+        start_time=start_time
+    )
 
     return {
         "status": "success",
