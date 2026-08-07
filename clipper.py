@@ -1,9 +1,10 @@
 import subprocess
 import os
 
+
 def make_clip(input_path, output_path, duration=30, start_time=0):
 
-    os.makedirs("outputs", exist_ok=True)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     command = [
         "ffmpeg",
@@ -11,7 +12,8 @@ def make_clip(input_path, output_path, duration=30, start_time=0):
         "-ss", str(start_time),
         "-i", input_path,
         "-t", str(duration),
-        "-vf", "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2",
+        "-vf",
+        "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2",
         "-c:v", "libx264",
         "-preset", "ultrafast",
         "-crf", "28",
@@ -23,7 +25,11 @@ def make_clip(input_path, output_path, duration=30, start_time=0):
     subprocess.run(command, check=True)
 
     return output_path
+
+
 def extract_audio(input_path, output_audio):
+
+    os.makedirs(os.path.dirname(output_audio), exist_ok=True)
 
     command = [
         "ffmpeg",
