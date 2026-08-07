@@ -1,13 +1,14 @@
 import subprocess
 import os
 
-def make_clip(input_path, output_path, duration=30):
+def make_clip(input_path, output_path, duration=30, start_time=0):
 
     os.makedirs("outputs", exist_ok=True)
 
     command = [
         "ffmpeg",
         "-y",
+        "-ss", str(start_time),
         "-i", input_path,
         "-t", str(duration),
         "-vf", "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2",
