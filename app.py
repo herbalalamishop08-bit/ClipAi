@@ -11,14 +11,13 @@ st.set_page_config(
 )
 
 os.makedirs("uploads", exist_ok=True)
-os.makedirs("outputs", exist_ok=True)
+os.makedirs("outputs", exist_ok=True")
 
 # ==========================
 # SIDEBAR
 # ==========================
 
 with st.sidebar:
-
     st.title("🎬 ClipAI")
 
     menu = st.radio(
@@ -39,9 +38,7 @@ with st.sidebar:
 if menu == "🏠 Dashboard":
 
     st.title("🎬 ClipAI Dashboard")
-
     st.success("🟢 Server Online")
-
     st.write("Selamat datang di ClipAI")
 
 # ==========================
@@ -89,23 +86,26 @@ elif menu == "📤 Upload":
                     status.text("✅ Hampir selesai...")
 
             result = generate_clip(input_path, duration)
-st.success(result["message"])
 
-st.image(
-    result["thumbnail"],
-    caption="📷 Thumbnail"
-)
+            st.success(result["message"])
 
-st.video(result["output"])
+            if "thumbnail" in result:
+                if os.path.exists(result["thumbnail"]):
+                    st.image(
+                        result["thumbnail"],
+                        caption="📷 Thumbnail"
+                    )
 
-with open(result["output"], "rb") as f:
+            st.video(result["output"])
 
-    st.download_button(
-        "📥 Download Clip",
-        data=f,
-        file_name=os.path.basename(result["output"]),
-        mime="video/mp4"
-    )
+            with open(result["output"], "rb") as f:
+
+                st.download_button(
+                    "📥 Download Clip",
+                    data=f,
+                    file_name=os.path.basename(result["output"]),
+                    mime="video/mp4"
+                )
 
 # ==========================
 # MY VIDEOS
