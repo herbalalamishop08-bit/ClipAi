@@ -89,22 +89,23 @@ elif menu == "📤 Upload":
                     status.text("✅ Hampir selesai...")
 
             result = generate_clip(input_path, duration)
+st.success(result["message"])
 
-            st.success(result["message"])
+st.image(
+    result["thumbnail"],
+    caption="📷 Thumbnail"
+)
 
-            for clip in result["outputs"]:
+st.video(result["output"])
 
-                st.video(clip)
+with open(result["output"], "rb") as f:
 
-                with open(clip, "rb") as f:
-
-                    st.download_button(
-                        f"📥 Download {os.path.basename(clip)}",
-                        data=f,
-                        file_name=os.path.basename(clip),
-                        mime="video/mp4",
-                        key=clip
-                    )
+    st.download_button(
+        "📥 Download Clip",
+        data=f,
+        file_name=os.path.basename(result["output"]),
+        mime="video/mp4"
+    )
 
 # ==========================
 # MY VIDEOS
