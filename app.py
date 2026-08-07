@@ -89,10 +89,19 @@ elif menu == "📤 Upload":
 
             st.success(result["message"])
 
-            st.video(result["output"])
+            for clip in result["outputs"]:
 
-            with open(result["output"], "rb") as f:
+    st.video(clip)
 
+    with open(clip, "rb") as f:
+
+        st.download_button(
+            f"📥 Download {os.path.basename(clip)}",
+            data=f,
+            file_name=os.path.basename(clip),
+            mime="video/mp4",
+            key=clip
+        )
                 st.download_button(
                     "📥 Download Clip",
                     data=f,
