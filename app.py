@@ -16,6 +16,7 @@ os.makedirs("outputs", exist_ok=True)
 # ==========================
 # SIDEBAR
 # ==========================
+
 with st.sidebar:
 
     st.title("🎬 ClipAI")
@@ -34,6 +35,7 @@ with st.sidebar:
 # ==========================
 # DASHBOARD
 # ==========================
+
 if menu == "🏠 Dashboard":
 
     st.title("🎬 ClipAI Dashboard")
@@ -45,6 +47,7 @@ if menu == "🏠 Dashboard":
 # ==========================
 # UPLOAD
 # ==========================
+
 elif menu == "📤 Upload":
 
     st.title("📤 Upload Video")
@@ -91,25 +94,22 @@ elif menu == "📤 Upload":
 
             for clip in result["outputs"]:
 
-    st.video(clip)
+                st.video(clip)
 
-    with open(clip, "rb") as f:
+                with open(clip, "rb") as f:
 
-        st.download_button(
-            f"📥 Download {os.path.basename(clip)}",
-            data=f,
-            file_name=os.path.basename(clip),
-            mime="video/mp4",
-            key=clip
-        )
-                st.download_button(
-                    "📥 Download Clip",
-                    data=f,
-                    file_name=os.path.basename(result["output"]),
-                    mime="video/mp4"
-                )# ==========================
+                    st.download_button(
+                        f"📥 Download {os.path.basename(clip)}",
+                        data=f,
+                        file_name=os.path.basename(clip),
+                        mime="video/mp4",
+                        key=clip
+                    )
+
+# ==========================
 # MY VIDEOS
 # ==========================
+
 elif menu == "📂 My Videos":
 
     st.title("📂 My Videos")
@@ -122,11 +122,13 @@ elif menu == "📂 My Videos":
             st.write(f"🎥 {video}")
 
     else:
+
         st.info("Belum ada video.")
 
 # ==========================
 # RESULTS
 # ==========================
+
 elif menu == "📥 Results":
 
     st.title("📥 Results")
@@ -166,6 +168,7 @@ elif menu == "📥 Results":
 # ==========================
 # SETTINGS
 # ==========================
+
 elif menu == "⚙️ Settings":
 
     st.title("⚙️ Settings")
