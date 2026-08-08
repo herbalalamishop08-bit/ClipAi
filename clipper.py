@@ -4,7 +4,10 @@ import os
 
 def make_clip(input_path, output_path, duration=30, start_time=0):
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    output_dir = os.path.dirname(output_path)
+
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
     command = [
         "ffmpeg",
@@ -25,23 +28,3 @@ def make_clip(input_path, output_path, duration=30, start_time=0):
     subprocess.run(command, check=True)
 
     return output_path
-
-
-def extract_audio(input_path, output_audio):
-
-    os.makedirs(os.path.dirname(output_audio), exist_ok=True)
-
-    command = [
-        "ffmpeg",
-        "-y",
-        "-i", input_path,
-        "-vn",
-        "-acodec", "mp3",
-        "-ar", "16000",
-        "-ac", "1",
-        output_audio
-    ]
-
-    subprocess.run(command, check=True)
-
-    return output_audio
