@@ -2,6 +2,8 @@ import os
 
 from clipper import make_clip
 from multi_clip import get_clip_points
+from thumbnail import create_thumbnail
+
 
 OUTPUT_FOLDER = "outputs"
 
@@ -30,7 +32,14 @@ def generate_clip(input_path, duration=30):
             start_time
         )
 
-        clips.append(output_path)
+        thumbnail_path = create_thumbnail(
+            output_path
+        )
+
+        clips.append({
+            "video": output_path,
+            "thumbnail": thumbnail_path
+        })
 
     return {
         "status": "success",
