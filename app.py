@@ -99,7 +99,7 @@ elif menu == "📤 Upload":
                 elif i < 90:
                     status.text("✂️ Membuat clip...")
                 else:
-                    status.text("✅ Hampir selesai...")
+                    status.text("🖼️ Membuat thumbnail...")
 
             try:
 
@@ -110,42 +110,58 @@ elif menu == "📤 Upload":
 
                 st.success(result["message"])
 
-                if "outputs" in result:
+                st.subheader("🎬 Hasil Clip")
 
-                    st.subheader("🎬 Hasil Clip")
+                for i, clip in enumerate(
+                    result["outputs"],
+                    start=1
+                ):
 
-                    for i, clip in enumerate(
-                        result["outputs"],
-                        start=1
-                    ):
+                    video_path = clip["video"]
+                    thumbnail_path = clip["thumbnail"]
 
-                        st.write(f"### 🎬 Clip {i}")
+                    st.write(f"### 🎬 Clip {i}")
 
-                        if os.path.exists(clip):
+                    # THUMBNAIL
+                    if os.path.exists(thumbnail_path):
 
-                            st.video(clip)
+                        st.image(
+                            thumbnail_path,
+                            caption=f"📷 Thumbnail Clip {i}",
+                            width=300
+                        )
 
-                            with open(clip, "rb") as f:
+                    else:
 
-                                st.download_button(
-                                    label=f"📥 Download Clip {i}",
-                                    data=f,
-                                    file_name=os.path.basename(clip),
-                                    mime="video/mp4",
-                                    key=f"download_clip_{i}"
-                                )
+                        st.warning(
+                            "Thumbnail tidak ditemukan."
+                        )
 
-                        else:
+                    # VIDEO
+                    if os.path.exists(video_path):
 
-                            st.error(
-                                f"File clip tidak ditemukan: {clip}"
+                        st.video(video_path)
+
+                        with open(
+                            video_path,
+                            "rb"
+                        ) as f:
+
+                            st.download_button(
+                                label=f"📥 Download Clip {i}",
+                                data=f,
+                                file_name=os.path.basename(
+                                    video_path
+                                ),
+                                mime="video/mp4",
+                                key=f"download_clip_{i}"
                             )
 
-                else:
+                    else:
 
-                    st.error(
-                        "❌ Tidak ada clip yang dihasilkan."
-                    )
+                        st.error(
+                            f"Video tidak ditemukan: {video_path}"
+                        )
 
             except Exception as e:
 
@@ -200,7 +216,10 @@ elif menu == "📥 Results":
 
                 st.video(clip_path)
 
-                with open(clip_path, "rb") as f:
+                with open(
+                    clip_path,
+                    "rb"
+                ) as f:
 
                     st.download_button(
                         label=f"⬇️ Download {clip}",
@@ -229,6 +248,6 @@ elif menu == "⚙️ Settings":
 
     st.title("⚙️ Settings")
 
-    st.write("ClipAI Version 2.0")
+    st.write("ClipAI Version 2.1")
 
     st.write("Developed by Ahmad")
