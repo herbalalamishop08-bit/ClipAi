@@ -1,19 +1,36 @@
-import subprocess
 import os
+import subprocess
 
-def generate_thumbnail(input_path, output_path):
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+THUMBNAIL_FOLDER = "outputs/thumbnails"
+
+os.makedirs(THUMBNAIL_FOLDER, exist_ok=True)
+
+
+def create_thumbnail(video_path):
+
+    filename = os.path.splitext(
+        os.path.basename(video_path)
+    )[0]
+
+    thumbnail_path = os.path.join(
+        THUMBNAIL_FOLDER,
+        f"{filename}.jpg"
+    )
 
     command = [
         "ffmpeg",
         "-y",
-        "-ss", "3",
-        "-i", input_path,
+        "-ss", "1",
+        "-i", video_path,
         "-frames:v", "1",
-        output_path
+        "-q:v", "2",
+        thumbnail_path
     ]
 
-    subprocess.run(command, check=True)
+    subprocess.run(
+        command,
+        check=True
+    )
 
-    return output_path
+    return thumbnail_path
