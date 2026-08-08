@@ -14,11 +14,13 @@ def generate_clip(input_path, duration=30):
 
     clips = []
 
-    for start_time in get_clip_points():
+    clip_points = get_clip_points()
+
+    for start_time in clip_points:
 
         output_path = os.path.join(
             OUTPUT_FOLDER,
-            f"{start_time}_{filename}"
+            f"clip_{start_time}_{filename}"
         )
 
         make_clip(
@@ -32,10 +34,11 @@ def generate_clip(input_path, duration=30):
 
     return {
         "status": "success",
-        "message": "✅ 3 Clip berhasil dibuat",
+        "message": f"✅ {len(clips)} clip berhasil dibuat",
         "outputs": clips
     }
 
 
 def generate_subtitle(input_path):
+
     return "Coming Soon"
