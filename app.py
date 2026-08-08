@@ -4,17 +4,20 @@ import os
 from storage import save_video, get_videos, get_clips
 from ai import generate_clip
 
+
 st.set_page_config(
     page_title="ClipAI",
     page_icon="🎬",
     layout="wide"
 )
 
+
 UPLOAD_FOLDER = "uploads"
 OUTPUT_FOLDER = "outputs"
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
 
 # ==========================
 # SIDEBAR
@@ -35,6 +38,7 @@ with st.sidebar:
         ]
     )
 
+
 # ==========================
 # DASHBOARD
 # ==========================
@@ -48,8 +52,9 @@ if menu == "🏠 Dashboard":
     st.write("Selamat datang di ClipAI!")
 
     st.info(
-        "Upload video panjang lalu buat beberapa clip otomatis."
+        "Upload video panjang lalu buat 3 clip otomatis."
     )
+
 
 # ==========================
 # UPLOAD
@@ -73,7 +78,7 @@ elif menu == "📤 Upload":
         st.video(uploaded)
 
         duration = st.selectbox(
-            "Durasi Clip",
+            "⏱️ Pilih Durasi Clip",
             [15, 30, 60],
             index=1
         )
@@ -90,42 +95,66 @@ elif menu == "📤 Upload":
                 if i < 30:
                     status.text("📤 Upload...")
                 elif i < 60:
-                    status.text("🎬 Processing...")
+                    status.text("🎬 Memproses video...")
                 elif i < 90:
-                    status.text("✂️ Creating Clips...")
+                    status.text("✂️ Membuat clip...")
                 else:
-                    status.text("✅ Finishing...")
+                    status.text("✅ Hampir selesai...")
 
-            result = generate_clip(
-                input_path,
-                duration
-            )
-                        st.success(result["message"])
+            try:
 
-            if "outputs" in result:
+                result = generate_clip(
+                    input_path,
+                    duration
+                )
 
-                st.subheader("🎬 Hasil Clip")
+                st.success(result["message"])
 
-                for i, clip in enumerate(result["outputs"], start=1):
+                if "outputs" in result:
 
-                    st.write(f"### Clip {i}")
+                    st.subheader("🎬 Hasil Clip")
 
-                    st.video(clip)
+                    for i, clip in enumerate(
+                        result["outputs"],
+                        start=1
+                    ):
 
-                    with open(clip, "rb") as f:
+                        st.write(f"### 🎬 Clip {i}")
 
-                        st.download_button(
-                            label=f"📥 Download Clip {i}",
-                            data=f,
-                            file_name=os.path.basename(clip),
-                            mime="video/mp4",
-                            key=f"clip_{i}"
-                        )
+                        if os.path.exists(clip):
 
-            else:
+                            st.video(clip)
 
-                st.error("❌ Tidak ada clip yang berhasil dibuat.")
-                # ==========================
+                            with open(clip, "rb") as f:
+
+                                st.download_button(
+                                    label=f"📥 Download Clip {i}",
+                                    data=f,
+                                    file_name=os.path.basename(clip),
+                                    mime="video/mp4",
+                                    key=f"download_clip_{i}"
+                                )
+
+                        else:
+
+                            st.error(
+                                f"File clip tidak ditemukan: {clip}"
+                            )
+
+                else:
+
+                    st.error(
+                        "❌ Tidak ada clip yang dihasilkan."
+                    )
+
+            except Exception as e:
+
+                st.error(
+                    f"❌ Gagal membuat clip: {e}"
+                )
+
+
+# ==========================
 # MY VIDEOS
 # ==========================
 
@@ -144,6 +173,7 @@ elif menu == "📂 My Videos":
     else:
 
         st.info("Belum ada video.")
+
 
 # ==========================
 # RESULTS
@@ -180,9 +210,16 @@ elif menu == "📥 Results":
                         key=f"result_{clip}"
                     )
 
+            else:
+
+                st.warning(
+                    f"File tidak ditemukan: {clip}"
+                )
+
     else:
 
         st.info("Belum ada clip.")
+
 
 # ==========================
 # SETTINGS
