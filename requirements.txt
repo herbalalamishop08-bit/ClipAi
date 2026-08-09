@@ -4,3 +4,4 @@ uvicorn==0.30.6
 python-multipart==0.0.9
 ffmpeg-python==0.2.0
 starlette==0.38.6
+scenedetect==0.7.0
